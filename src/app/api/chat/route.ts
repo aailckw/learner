@@ -80,7 +80,7 @@ export async function POST(req: Request) {
     });
 
     // Add conversation ID to response headers for new conversations
-    const response = result.toDataStreamResponse();
+    const response = result.toTextStreamResponse();
     if (!conversationId) {
       response.headers.set("X-Conversation-Id", conversation.id);
     }
