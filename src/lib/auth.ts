@@ -1,3 +1,4 @@
+import NextAuth from "next-auth";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
@@ -71,3 +72,8 @@ export const authOptions: NextAuthOptions = {
     },
   },
 };
+
+// Initialize NextAuth and export the `auth` helper for server usage.
+// Call `auth()` in Route Handlers to get the current session.
+const nextAuth = NextAuth(authOptions as any);
+export const auth = nextAuth.auth;
