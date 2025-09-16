@@ -3,10 +3,10 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { User, Bot } from "lucide-react";
-import { Message } from "ai";
+import { UIMessage } from "ai";
 
 interface ChatMessageProps {
-  message: Message;
+  message: UIMessage;
 }
 
 export function ChatMessage({ message }: ChatMessageProps) {
