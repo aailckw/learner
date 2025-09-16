@@ -9,13 +9,17 @@ export async function POST(req: Request) {
     if (!session?.user) {
       return new Response("Unauthorized", { status: 401 });
     }
+    if (!session.user.id) {
+      return new Response("Unauthorized", { status: 401 });
+    }
+    const userId = session.user.id as string;
 
     const { content, conversationId, experimental_attachments } = await req.json();
 
     let conversation = null;
     if (conversationId) {
       conversation = await prisma.conversation.findUnique({
-        where: { id: conversationId, userId: session.user.id },
+        where: { id: conversationId, userId },
       });
       if (!conversation) {
         return new Response("Conversation not found", { status: 404 });
@@ -23,7 +27,7 @@ export async function POST(req: Request) {
     } else {
       conversation = await prisma.conversation.create({
         data: {
-          userId: session.user.id,
+          userId,
           title: content?.substring(0, 50) || "New conversation",
         },
       });
@@ -33,7 +37,7 @@ export async function POST(req: Request) {
     await prisma.message.create({
       data: {
         conversationId: conversation.id,
-        userId: session.user.id,
+        userId,
         role: "user",
         content,
         imageUrl: experimental_attachments?.[0]?.url,
