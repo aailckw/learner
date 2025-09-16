@@ -1,0 +1,50 @@
+"use client";
+
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
+import { User, Bot } from "lucide-react";
+import { Message } from "ai";
+
+interface ChatMessageProps {
+  message: Message;
+}
+
+export function ChatMessage({ message }: ChatMessageProps) {
+  const isUser = message.role === "user";
+
+  return (
+    <div className={cn("flex gap-3", isUser && "flex-row-reverse")}>
+      <Avatar className="h-8 w-8">
+        <AvatarFallback>
+          {isUser ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
+        </AvatarFallback>
+      </Avatar>
+      
+      <div
+        className={cn(
+          "rounded-lg px-4 py-2 max-w-[80%]",
+          isUser
+            ? "bg-primary text-primary-foreground"
+            : "bg-muted"
+        )}
+      >
+        <div className="whitespace-pre-wrap break-words">
+          {message.content}
+        </div>
+        
+        {/* Display image if present in experimental_attachments */}
+        {message.experimental_attachments?.map((attachment, index) => (
+          <div key={index} className="mt-2">
+            {attachment.contentType?.startsWith("image/") && attachment.url && (
+              <img
+                src={attachment.url}
+                alt="Uploaded image"
+                className="rounded-lg max-w-full"
+              />
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
