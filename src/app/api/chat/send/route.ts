@@ -1,12 +1,11 @@
 import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await auth(req);
     if (!session?.user) {
       return new Response("Unauthorized", { status: 401 });
     }
