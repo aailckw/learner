@@ -29,7 +29,12 @@ export function ChatMessage({ message }: ChatMessageProps) {
         )}
       >
         <div className="whitespace-pre-wrap break-words">
-          {message.content}
+          {/* Render text parts from the UIMessage parts */}
+          {(message.parts as any[])
+            .filter((p) => p?.type === "text")
+            .map((p, i) => (
+              <span key={i}>{p.text}</span>
+            ))}
         </div>
         
         {/* Display image if present in experimental_attachments */}
