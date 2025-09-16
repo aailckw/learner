@@ -37,8 +37,11 @@ export function ChatMessage({ message }: ChatMessageProps) {
             ))}
         </div>
         
-        {/* Display image if present in experimental_attachments */}
-        {message.experimental_attachments?.map((attachment, index) => (
+        {/* Display image if present in parts with file data */}
+        {(message.parts as any[])
+          .filter((p) => p?.type === "file")
+          .flatMap((p) => p.files ?? [])
+          .map((attachment: any, index: number) => (
           <div key={index} className="mt-2">
             {attachment.contentType?.startsWith("image/") && attachment.url && (
               <img
