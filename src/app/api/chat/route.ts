@@ -10,6 +10,10 @@ export async function POST(req: Request) {
     if (!session?.user) {
       return new Response("Unauthorized", { status: 401 });
     }
+    if (!session.user.id) {
+      return new Response("Unauthorized", { status: 401 });
+    }
+    const userId = session.user.id as string;
 
     const { messages, conversationId } = await req.json();
 
@@ -17,7 +21,7 @@ export async function POST(req: Request) {
     let conversation;
     if (conversationId) {
       conversation = await prisma.conversation.findUnique({
-        where: { id: conversationId, userId: session.user.id },
+        where: { id: conversationId, userId },
       });
       
       if (!conversation) {
@@ -38,7 +42,7 @@ export async function POST(req: Request) {
     await prisma.message.create({
       data: {
         conversationId: conversation.id,
-        userId: session.user.id,
+        userId,
         role: userMessage.role,
         content: userMessage.content,
         imageUrl: userMessage.experimental_attachments?.[0]?.url,
