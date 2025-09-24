@@ -11,6 +11,7 @@ interface ChatMessageProps {
 
 export function ChatMessage({ message }: ChatMessageProps) {
   const isUser = message.role === "user";
+  const parts = (Array.isArray(message.parts) ? message.parts : []) as any[];
 
   return (
     <div className={cn("flex gap-3", isUser && "flex-row-reverse")}>
@@ -29,16 +30,16 @@ export function ChatMessage({ message }: ChatMessageProps) {
         )}
       >
         <div className="whitespace-pre-wrap break-words">
-          {/* Render text parts from the UIMessage parts */}
-          {(message.parts as any[])
-            .filter((p) => p?.type === "text")
-            .map((p, i) => (
-              <span key={i}>{p.text}</span>
-            ))}
+        {/* Render text parts from the UIMessage parts */}
+        {parts
+          .filter((p) => p?.type === "text")
+          .map((p, i) => (
+            <span key={i}>{p.text}</span>
+          ))}
         </div>
         
         {/* Display image if present in parts with file data */}
-        {(message.parts as any[])
+        {parts
           .filter((p) => p?.type === "file")
           .flatMap((p) => p.files ?? [])
           .map((attachment: any, index: number) => (

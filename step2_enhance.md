@@ -200,3 +200,6 @@ We've built a minimal but functional Gemini-like chatbot with:
 - Regularly gather user feedback
 - Keep the interface minimal and clean
 - Prioritize performance and reliability
+
+
+

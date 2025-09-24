@@ -71,6 +71,7 @@ export function ChatInterface({ conversationId, onNewConversation }: ChatInterfa
     try {
       const resp = await fetch('/api/chat/send', {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ content: input, conversationId, experimental_attachments: options?.experimental_attachments }),
       });
